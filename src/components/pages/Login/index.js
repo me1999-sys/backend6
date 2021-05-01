@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 import Navbar from "../../molecules/NavBar";
+import firebase from "../../../config/Firebase"
+import {useHistory} from 'react-router-dom'
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  let history = useHistory();
 
   const handleSubmit = () => {
     const data = {
       email: email,
       password: password,
     };
-    console.log(data);
+    firebase.auth().signInWithEmailAndPassword(email, password)
+    .then((res) => history.push("/"))
+      .catch((error) => console.log("Error", error));
+
   };
 
   return (

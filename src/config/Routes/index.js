@@ -1,10 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Login from '../../components/pages/Login';
-import Dashboard from '../../components/pages/Dashboard';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import Dashboard from '../../components/pages/Dashboard/index';
 import About from '../../components/pages/About';
-import Register from '../../components/pages/Register';
-import Adduser from '../../components/pages/Adduser';
+import Register from '../../components/pages/Register'
+import Login from'../../components/pages/Login' ;
 
 const Routes = () => {
   return (
@@ -18,9 +17,6 @@ const Routes = () => {
         </Route>
         <Route path="/register">
           <Register />
-        </Route>
-        <Route path="/adduser">
-          <Adduser />
         </Route>
         <Route path="/about">
           <About />

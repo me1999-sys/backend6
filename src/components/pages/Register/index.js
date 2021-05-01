@@ -1,71 +1,67 @@
 import React, { useState } from "react";
-import Navbar from '../../molecules/NavBar';
+import firebase from '../../../config/Firebase'
+import {useHistory} from 'react-router-dom'
 
-const Register = () => {
-  const [fullName, setfullName] = useState("");
-  const [userName, setuserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setphoneNumber] = useState("");
-  const [address, setAddress] = useState("");
+const Register = () =>{
+  const [email,setEmail] = useState("")
+  const [password,setPassword] =useState("")
+  const [fullname,setFullname] =useState("")
 
-  const handleSubmit = () => {
+  let history = useHistory();
+  const onSubmit  =() =>{
+    
     const data = {
-      fullName: fullName,
-      userName: userName,
-      email: email,
-      phoneNumber: phoneNumber,
-      address: address,
-    };
-    console.log(data);
+      email:email,
+      fullname: fullname,
+    }
+
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+  .then((userCredential) => {
+    //simpan ke realtime database
+    const userId = userCredential.user.uid;
+    firebase.database().ref('users/' + userId).set(data);
+   setFullname('')
+   setEmail('')
+  setPassword('')
+    // redirect ke halaman login
+  history.push("/login")
+  })
+  .catch((error) => {
+    console.log(error)
+//tampilkan pesan error
+  });
+
   };
 
   return (
-    //JSX
-    <div className="container mt-5">
-      <Navbar />
-      <h3 className="mt-3">Register</h3>
-      <p className="form-label mt-3">Fullname</p>
-      <input
-        className="form-control"
-        placeholder="Masukan full name"
-        value={fullName}
-        onChange={(e) => setfullName(e.target.value)}
-      />
-      <p className="form-label mt-3">Username</p>
-      <input
-        className="form-control"
-        placeholder="Masukan username"
-        type="userName"
-        value={userName}
-        onChange={(e) => setuserName(e.target.value)}
-      />
-      <p className="form-label mt-3">Email</p>
-      <input
-        className="form-control"
-        placeholder="Masukan email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <p className="form-label mt-3">Phone Number</p>
-      <input
-        className="form-control"
-        placeholder="Masukan phone number"
-        type="phoneNumber"
-        value={phoneNumber}
-        onChange={(e) => setphoneNumber(e.target.value)}
-      />
-      <p className="form-label mt-3">Address</p>
-      <input
-        className="form-control"
-        placeholder="Masukan address"
-        type="address"
-        value={address}
-        onChange={(e) => setAddress(e.target.value)}
-      />
-      <br />
-      <br />
-      <button className="btn btn-primary mb-3"  onClick={handleSubmit} >Register</button>
-    </div>
+     <div className="container mt-5">
+       
+       <p className="mt-4">Nama Lengkap</p>
+            <input 
+            className="form-control"
+            placeholder="Masukkan nama lengkap" 
+            value={fullname} 
+            onChange={(e) =>setFullname(e.target.value)} />
+           
+           <p className="mt-4">Email</p>
+            <input 
+            className="form-control"
+            placeholder="Masukkan email" 
+            value={email} 
+            onChange={(e) =>setEmail(e.target.value)} />
+            <br />
+            <p className="mt-4">Password</p>
+            <input className="form-control"
+             placeholder="Masukkan password" 
+             type="password" 
+             value={password} 
+             onChange={(e) =>setPassword(e.target.value)}/>
+            <br>
+            </br>
+            <button className="btn btn-primary mb-3"
+             type="button" onClick={onSubmit}>Register New User</button>
+        
+     </div>
   );
 };
 
